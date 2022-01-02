@@ -27,29 +27,31 @@ import scipy.stats
 from collections import defaultdict
 import csv
 import sys
-
+import sys
+import re
+import os
 
 # =============================================================================
 def print_usage():
 
     print(' ')
-    print('        usage: python3 DIAMOnD.py network_file seed_file n alpha(optional) outfile_name (optional)')
+    print('        usage: python3 DIAMOnD.py network_file seed_file n outfile_name alpha(optional) cytoscape_file (optional)')
     print('        -----------------------------------------------------------------')
-    print('        network_file : The edgelist must be provided as any delimiter-separated')
-    print('                       table. Make sure the delimiter does not exit in gene IDs')
-    print('                       and is consistent across the file.')
-    print('                       The first two columns of the table will be')
-    print('                       interpreted as an interaction gene1 <==> gene2')
-    print('        seed_file    : table containing the seed genes (if table contains')
-    print('                       more than one column they must be tab-separated;')
-    print('                       the first column will be used only)')
-    print('        n            : desired number of DIAMOnD genes, 200 is a reasonable')
-    print('                       starting point.')
-    print('        alpha        : an integer representing weight of the seeds,default')
-    print('                       value is set to 1')
-    print('        outfile_name : results will be saved under this file name')
-    print('                       by default the outfile_name is set to "first_n_added_nodes_weight_alpha.txt"')
-    print(' ')
+    print('        network_file     : The edgelist must be provided as any delimiter-separated')
+    print('                           table. Make sure the delimiter does not exit in gene IDs')
+    print('                           and is consistent across the file.')
+    print('                           The first two columns of the table will be')
+    print('                           interpreted as an interaction gene1 <==> gene2')
+    print('        seed_file        : table containing the seed genes (if table contains')
+    print('                           more than one column they must be tab-separated;')
+    print('                           the first column will be used only)')
+    print('        n                : desired number of DIAMOnD genes, 200 is a reasonable')
+    print('                           starting point.')
+    print('        alpha            : an integer representing weight of the seeds,default')
+    print('                           value is set to 1')
+    print('        outfile_name     : results will be saved under this file name')
+    print('        cytoscape_file   : supply either a True or False string depending on whether the input is a ')
+    print('                           cytoscape level 0 edge interaction table')
 
 
 # =============================================================================
@@ -58,6 +60,7 @@ def check_input_style(input_list):
         network_edgelist_file = input_list[1]
         seeds_file = input_list[2]
         max_number_of_added_nodes = int(input_list[3])
+        outfile_name = input_list[4]
     # if no input is given, print out a usage message and exit
     except:
         print_usage()
@@ -65,25 +68,49 @@ def check_input_style(input_list):
         return
 
     alpha = 1
-    outfile_name = 'first_%d_added_nodes_weight_%d.txt' % (max_number_of_added_nodes, alpha)
+    cytoscape_file = False
 
-    if len(input_list) == 5:
-        try:
-            alpha = int(input_list[4])
-            outfile_name = 'first_%d_added_weight_%d.txt' % (max_number_of_added_nodes, alpha)
-        except:
-            outfile_name = input_list[4]
+    if len(input_list) >= 5:
+        for number in range(5, len(input_list)):
+            if str(input_list[number] in ["True", "False"]):
+                try:
+                    cytoscape_file = input_list[number]
+                except:
+                    print_usage()
+                    sys.exit(0)
+                    return
+            elif re.match("/\[[0-9]+\]/", input_list[number]):
+                try:
+                    alpha = int(input_list[5])
+                except:
+                    print_usage()
+                    sys.exit(0)
+                    return
 
-    if len(input_list) == 6:
-        try:
-            alpha = int(input_list[4])
-            outfile_name = input_list[5]
-        except:
-            print_usage()
-            sys.exit(0)
-            return
-    return network_edgelist_file, seeds_file, max_number_of_added_nodes, alpha, outfile_name
+    return network_edgelist_file, seeds_file, max_number_of_added_nodes, alpha, outfile_name, cytoscape_file
 
+# =============================================================================
+def parse_cytoscape_file(network_edgelist_file):
+    # create empty file
+    PPI_file = "{}/PPI_file.txt".format(os.getcwd())
+    with open(PPI_file, "w") as out:
+        pass
+
+    with open(PPI_file, "a") as out:
+        with open(network_edgelist_file) as file:
+            lines = file.readlines()
+            last = lines[-1]
+            for line in lines:
+                if not line.startswith("\"Author\""):
+                    ppi = line.strip('\n').strip(',').rsplit("\",\"", 2)[1]
+                    ids = re.split(" (.*) ", ppi)
+                    transposed_ppis = "{},{}".format(ids[0], ids[2])
+                    if line is last:
+                        out.write(transposed_ppis)
+                    else:
+                        out.write(transposed_ppis + "\n")
+    print("Parsed cytoscape file")
+    return PPI_file
 
 # =============================================================================
 def read_input(network_file, seed_file):
@@ -374,7 +401,7 @@ def DIAMOnD(G_original, seed_genes, max_number_of_added_nodes, alpha, outfile=No
      - max_number_of_added_nodes:
              after how many added nodes should the algorithm stop
      - alpha:
-             given weight to the sees
+             given weight to the seeds
      - outfile:
              filename for the output generates by the algorithm,
              if not given the program will name it 'first_x_added_nodes.txt'
@@ -411,10 +438,10 @@ def DIAMOnD(G_original, seed_genes, max_number_of_added_nodes, alpha, outfile=No
             DIAMOnD_node = DIAMOnD_node_info[0]
             p = float(DIAMOnD_node_info[3])
 
-            fout.write('\t'.join(map(str, ([rank, DIAMOnD_node, p]))) + '\n')
+            if p<float(0.001):
+                fout.write('\t'.join(map(str, ([rank, DIAMOnD_node, p]))) + '\n')
 
     return added_nodes
-
 
 # ===========================================================================
 #
@@ -442,10 +469,16 @@ if __name__ == '__main__':
 
     # check if input style is correct
     input_list = sys.argv
-    network_edgelist_file, seeds_file, max_number_of_added_nodes, alpha, outfile_name = check_input_style(input_list)
+    network_edgelist_file, seeds_file, max_number_of_added_nodes, \
+    alpha, outfile_name, cytoscape_file = check_input_style(input_list)
+
+    # if the script is provided with a cytoscape file to aprse, use the network_edgelist_file command line argument
+    # as the name of the output parsed cytoscape file to create the file ready for use by DIAMOnD
+    if cytoscape_file:
+        PPI_file = parse_cytoscape_file(network_edgelist_file)
 
     # read the network and the seed genes:
-    G_original, seed_genes = read_input(network_edgelist_file, seeds_file)
+    G_original, seed_genes = read_input(PPI_file, seeds_file)
 
     # run DIAMOnD
     added_nodes = DIAMOnD(G_original,
