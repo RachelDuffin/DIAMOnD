@@ -1,0 +1,3 @@
+[submodule "Phen2Gene"]
+	path = Phen2Gene
+	url = https://github.com/WGLab/Phen2Gene

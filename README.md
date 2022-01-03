@@ -1,8 +1,21 @@
-# DIAMOnD
+# 
+
+Modification of 
 
 Modification of DIAMOnD.py which runs on the output edge table from Cytoscape. Parses a cytoscape edge csv table and 
 uses this as the input network_file to the DIAMOnD.py script. Alternatively the script can be run without cytoscape 
 input, using a network PPI file as specified in the Example directory.
+
+Phen2Gene is a phenotype-driven gene prioritization tool, that takes HPO (Human Phenotype Ontology) IDs as inputs, 
+searches and prioritizes candidate causal disease genes. It is distributed under the MIT License by Wang Genomics Lab. 
+Additionally we have provided a web server and an associated RESTful API service for running Phen2Gene. Finally, a 
+mobile app for Phen2Gene and several other genetic diagnostic tools from our lab is being tested and will be available 
+soon.
+
+Citing Phen2Gene
+Please cite: Zhao, M., Havrilla, J. M., Fang, L., Chen, Y., Peng, J., Liu, C., Wu C., Sarmady M., Botas P., Isla J.,
+Lyon G., Weng C., Wang, K. (2019). Phen2Gene: Rapid Phenotype-Driven Gene Prioritization for Rare Diseases.NAR Genomics 
+and Bioinformatics, Volume 2, Issue 2, June 2020, lqaa032
 
 DIAMOnD.py runs the DIAMOnD algorithm as described in
  
@@ -11,6 +24,11 @@ DIAMOnD.py runs the DIAMOnD algorithm as described in
  the Human Interactome. PlOS Comp Bio (in press), 2015.
 
 by Susan Dina Ghiassian, Joerg Menche & Albert-Laszlo Barabasi
+
+
+MOdification of 
+
+
 
 #--------------------
 ## Inputs

@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-
 """
 # -----------------------------------------------------------------------
 # encoding: utf-8
@@ -18,49 +17,47 @@
 #
 # -----------------------------------------------------------------------
 """
-
-import time
 import networkx as nx
 import numpy as np
-import copy
 import scipy.stats
 from collections import defaultdict
 import csv
 import sys
-import sys
 import re
 import os
+import biomart
+import subprocess
 
 # =============================================================================
 def print_usage():
 
     print(' ')
-    print('        usage: python3 DIAMOnD.py network_file seed_file n outfile_name alpha(optional) cytoscape_file (optional)')
+    print('        usage: python3 hpo_terms DIAMOnD.py network_file seed_file n outfile_name alpha(optional) cytoscape_file (optional)')
     print('        -----------------------------------------------------------------')
-    print('        network_file     : The edgelist must be provided as any delimiter-separated')
-    print('                           table. Make sure the delimiter does not exit in gene IDs')
-    print('                           and is consistent across the file.')
-    print('                           The first two columns of the table will be')
-    print('                           interpreted as an interaction gene1 <==> gene2')
-    print('        seed_file        : table containing the seed genes (if table contains')
+    print('        hpo_terms        : File containing HPO terms')
+    print('        network_file     : File providing the network in the form of either an edgelist ')
+    print('                           (delimiter-separated) or a cytoscape exported edge table. In the case of an ')
+    print('                           edgelist, it should be delimiter-separated and the delimiter must not exist in ')
+    print('                           gene IDs and be consistent across the file. Column 1 and 2 of the edgelist will')
+    print('                           be interpreted as an interaction gene1 <==> gene2')
+    print('        seed_file        : table containing the seed genes as gene names (if table contains')
     print('                           more than one column they must be tab-separated;')
     print('                           the first column will be used only)')
-    print('        n                : desired number of DIAMOnD genes, 200 is a reasonable')
-    print('                           starting point.')
-    print('        alpha            : an integer representing weight of the seeds,default')
-    print('                           value is set to 1')
-    print('        outfile_name     : results will be saved under this file name')
+    print('        n                : number of desired iteratiosn (desired number of DIAMOnD genes), 200 is a ')
+    print('                           reasonable starting point.')
+    print('        alpha            : an integer representing weight of the seeds, default value is set to 1')
+    print('        outfile_name     : results of the DIAMOnD analysis will be saved under this file name')
     print('        cytoscape_file   : supply either a True or False string depending on whether the input is a ')
     print('                           cytoscape level 0 edge interaction table')
-
 
 # =============================================================================
 def check_input_style(input_list):
     try:
-        network_edgelist_file = input_list[1]
-        seeds_file = input_list[2]
-        max_number_of_added_nodes = int(input_list[3])
-        outfile_name = input_list[4]
+        hpo_terms = input_list[1]
+        network_edgelist_file = input_list[2]
+        seeds_file = input_list[3]
+        max_number_of_added_nodes = int(input_list[4])
+        outfile_name = input_list[5]
     # if no input is given, print out a usage message and exit
     except:
         print_usage()
@@ -70,8 +67,8 @@ def check_input_style(input_list):
     alpha = 1
     cytoscape_file = False
 
-    if len(input_list) >= 5:
-        for number in range(5, len(input_list)):
+    if len(input_list) >= 6:
+        for number in range(6, len(input_list)):
             if str(input_list[number] in ["True", "False"]):
                 try:
                     cytoscape_file = input_list[number]
@@ -81,13 +78,13 @@ def check_input_style(input_list):
                     return
             elif re.match("/\[[0-9]+\]/", input_list[number]):
                 try:
-                    alpha = int(input_list[5])
+                    alpha = int(input_list[number])
                 except:
                     print_usage()
                     sys.exit(0)
                     return
 
-    return network_edgelist_file, seeds_file, max_number_of_added_nodes, alpha, outfile_name, cytoscape_file
+    return hpo_terms, network_edgelist_file, seeds_file, max_number_of_added_nodes, alpha, outfile_name, cytoscape_file
 
 # =============================================================================
 def parse_cytoscape_file(network_edgelist_file):
@@ -444,42 +441,107 @@ def DIAMOnD(G_original, seed_genes, max_number_of_added_nodes, alpha, outfile=No
     return added_nodes
 
 # ===========================================================================
+
+def get_output_ids(outfile_name):
+    print("Parsing ids from DIAMOnD output...")
+    ID_list = []
+    with open(outfile_name) as file:
+        lines = file.readlines()
+        for line in lines:
+            if not line.startswith("#rank"):
+                id = line.strip('\n').rsplit("\t")[1]
+                ID_list.append(id)
+    return ID_list
+
+# ===========================================================================
+def file_to_list(file):
+    list = []
+    with open(file) as input:
+        for line in input.readlines():
+            list.append(line.strip("\n"))
+    return list
+
+# ===========================================================================
+def ncbi_id_to_genename(ID_list, filename):
+    print("Getting {} names from BioMart...".format(filename))
+    server = biomart.BiomartServer("http://useast.ensembl.org/biomart")
+    hsapiens_ensembl_genes = server.datasets['hsapiens_gene_ensembl']
+    # get ID_list from parsing the output file from DIAMOnD
+
+    response = hsapiens_ensembl_genes.search({
+        'filters': {'entrezgene_id': ID_list
+                    },
+        'attributes': ['external_gene_name']
+    })
+    name_list = []
+    response_lines = (response.text).split("\n")
+    for line in response_lines:
+        last = response_lines[-1]
+        if (line is last) and (line==""):
+            # skip as last line is empty list
+            pass
+        else:
+            name_list.append(line)
+    return name_list
+
+# ===========================================================================
+def genename_to_ncbi_id(gene_list, filename):
+    print("Getting {} IDs from BioMart...".format(filename))
+    server = biomart.BiomartServer("http://useast.ensembl.org/biomart")
+    hsapiens_ensembl_genes = server.datasets['hsapiens_gene_ensembl']
+    # get ID_list from parsing the output file from DIAMOnD
+
+    response = hsapiens_ensembl_genes.search({
+        'filters': {'external_gene_name': gene_list
+                    },
+        'attributes': ['entrezgene_id']
+    })
+    outfile = "{}/{}{}".format(os.getcwd(), filename, "_ids.txt")
+    with open(outfile, "w+") as out:
+        response_lines = (response.text).split("\n")
+        for line in response_lines:
+            last = response_lines[-1]
+            if (line is last) and (line==""):
+                # skip as last line is empty list
+                pass
+            else:
+                out.write(line + "\n")
+    return outfile
+
+# ===========================================================================
+def Phen2Gene(hpo_terms, biomart_out):
+    print("Prioritise candidate genes using HPO terms using Phen2Gene...")
+    # hpo list is a text file
+    # need to convert NCBI Ids back to gene IDs (use pip install biomart & write some code to do this)
+    command = "python3 Phen2Gene/phen2gene.py -f {} -v -w sk -out out/prioritizedgenelist -l " \
+              "{}".format(hpo_terms, biomart_out)
+    subprocess.run(command, shell=True)
+
+# ===========================================================================
 #
 # "Hey Ho, Let's go!" -- The Ramones (1976)
 #
 # ===========================================================================
 
-
 if __name__ == '__main__':
-    # -----------------------------------------------------
-    # Checking for input from the command line:
-    # -----------------------------------------------------
-    #
-    # [1] file providing the network in the form of an edgelist
-    #     (tab-separated table, columns 1 & 2 will be used)
-    #
-    # [2] file with the seed genes (if table contains more than one
-    #     column they must be tab-separated; the first column will be
-    #     used only)
-    #
-    # [3] number of desired iterations
-    #
-    # [4] (optional) seeds weight (integer), default value is 1
-    # [5] (optional) name for the results file
-
     # check if input style is correct
     input_list = sys.argv
-    network_edgelist_file, seeds_file, max_number_of_added_nodes, \
+    hpo_terms, network_edgelist_file, seeds_file, max_number_of_added_nodes, \
     alpha, outfile_name, cytoscape_file = check_input_style(input_list)
+
+    # convert seeds_file gene names to NCBI IDs
+    green_gene_namelist = file_to_list(seeds_file)
+    seeds_file = genename_to_ncbi_id(green_gene_namelist, "seed_gene_names")
 
     # if the script is provided with a cytoscape file to aprse, use the network_edgelist_file command line argument
     # as the name of the output parsed cytoscape file to create the file ready for use by DIAMOnD
-    if cytoscape_file:
+    if cytoscape_file=='True':
         PPI_file = parse_cytoscape_file(network_edgelist_file)
+    else:
+        PPI_file = network_edgelist_file
 
     # read the network and the seed genes:
     G_original, seed_genes = read_input(PPI_file, seeds_file)
-
     # run DIAMOnD
     added_nodes = DIAMOnD(G_original,
                           seed_genes,
@@ -487,3 +549,18 @@ if __name__ == '__main__':
                           outfile=outfile_name)
 
     print("\n results have been saved to '%s' \n" % outfile_name)
+
+    # Parse IDs from DIAMOnD output, then convert IDs to gene names and combine with the original green gene names
+    # and write to file for input to Phen2Gene
+
+    ID_list = get_output_ids(outfile_name)
+    predicted_gene_names = ncbi_id_to_genename(ID_list, "predicted gene names")
+    combined_genelists = green_gene_namelist + predicted_gene_names
+
+    #concatenate
+    combined_genelist_file = '{}/{}'.format(os.getcwd(), "combined_genelists.txt")
+    with open(combined_genelist_file, 'w') as outfile:
+        for item in combined_genelists:
+            outfile.write(item + "\n")
+
+    Phen2Gene(hpo_terms, combined_genelist_file)
