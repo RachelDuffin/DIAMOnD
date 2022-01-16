@@ -24,11 +24,11 @@ candidate gene list.
 Note that gene IDs in the network file should be NCBI IDs.
 
 ## Outputs
-| Output                    | Details                                                                                                |
-|---------------------------|--------------------------------------------------------------------------------------------------------|
-| PPI file (optional)       | Protein-protein interaction file parsed from cytoscape csv                                             |
-| DIAMOnD nodes file        | File containing generated DIAMOnD nodes                                                                |
-| HPO prioritized gene list   | File containing the HPO-prioritized genes (out/prioritizedgenelist/output_file.associated_gene_list) |
+| Output                    | Details                                                                                              |
+|---------------------------|------------------------------------------------------------------------------------------------------|
+| PPI file (optional)       | Protein-protein interaction file parsed from cytoscape csv                                           |
+| DIAMOnD nodes file        | File containing generated DIAMOnD nodes                                                              |
+| HPO prioritized gene list | File containing the HPO-prioritized genes (out/prioritizedgenelist/output_file.associated_gene_list) |
 
 #----------------------------------------------------------------------------------------------------------------------
 ## Installation and running the code
