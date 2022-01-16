@@ -29,16 +29,9 @@ def main():
             for ID in suid_list:
                 if ID == elements[0]:
                     final_id_list.append(elements[1])
-    print(final_id_list)
     predicted_gene_names = ncbi_id_to_genename(final_id_list, "predicted gene names")
-    print("PRed")
-    print(predicted_gene_names)
     green_gene_namelist = file_to_list(gene_name_file)
-    print("green")
-    print(green_gene_namelist)
     combined_genelists = green_gene_namelist + predicted_gene_names
-    print("combined")
-    print(combined_genelists)
 
     with open(out, "w") as file:
         for gene in combined_genelists:

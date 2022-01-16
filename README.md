@@ -1,4 +1,4 @@
-# GenePanelAnalyzer
+# GenePanelAnalyzer.py
 
 This script modifies DIAMOnD.py and makes use of the Phen2Gene tool. It carries out the following steps
 1. Parses a cytoscape edge csv table for use as the input network file (optional)
@@ -9,13 +9,12 @@ output genes with a p value of <0.001
 4. Inputs the seed and predicted genes, and the disease-associated HPO terms, to Phen2Gene to produce an output scored
 candidate gene list.
 
-#----------------------------------------------------------------------------------------------------------------------
 ## Inputs
 | Input                     | Details                                                                                                                                                                                                                                                                     |
 |---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | hpo_terms                 | File containing HPO terms                                                                                                                                                                                                                                                   |
 | network_file              | Network file detailing interactions (edges) between nodes. This can either be an exported cytoscape level 0 edge table, or a delimiter-separated table. In the case of a delimiter-separated table, the first two columns are interpreted as interaction gene1 <==> gene2). |
-| seed_file                 | Table containing the seed gene names associated with a phenotype of interest, only column 1 is used.                                                                                                                                                                        |
+| seed_file                 | File containing seed gene names associated with a phenotype of interest, one gene name per line.                                                                                                                                                                            |
 | n                         | Number of diamond nodes to generate                                                                                                                                                                                                                                         |
 | outfile_name              | Results of the DIAMOnD analysis will be saved under this file name                                                                                                                                                                                                          |
 | alpha (optional)          | Supplies a weight to the seeds. Default value is 1.                                                                                                                                                                                                                         |
@@ -30,7 +29,6 @@ Note that gene IDs in the network file should be NCBI IDs.
 | DIAMOnD nodes file        | File containing generated DIAMOnD nodes                                                              |
 | HPO prioritized gene list | File containing the HPO-prioritized genes (out/prioritizedgenelist/output_file.associated_gene_list) |
 
-#----------------------------------------------------------------------------------------------------------------------
 ## Installation and running the code
 The Example directory contains a set of input files that can be used to run the code.
 
@@ -54,6 +52,23 @@ The following command will generate the first 100 DIAMOnD nodes from a cytoscape
 <em><pre>python3 GenePanelAnalyzer.py Example/CM_core_HPO.txt Example/CM_human_default_edge.csv Example/CM_green_genes_names.txt 100 CM_diamond_output.txt True</pre></em>
 
 #----------------------------------------------------------------------------------------------------------------------
+# moduland_reportparser.py
+This script takes the output from a moduland analysis on a level 0 network, extracts the genes from the moduland report,
+and combines this with the seed gene list. This output file is ready for use with Phen2Gene. 
+<em><pre>python3 moduland_report_parser.py Example/network_0_node_table.csv Example/network-0_info.csv Example/CM_green_genes_names.txt allspecies_moduland_geneids.txt</pre></em>
+
+## Inputs
+| Input        | Details                                                                                                                                                                   |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| node table   | Level 0 node table (copy pasted to ensure SUID column is present, with SID in column 1, shared name in column 2, and the column headers “SUID” and “shared name” inserted.|
+| network info | Network 0 module-level report file.                                                                                                                                       |
+| seed_file    | File containing seed gene names associated with a phenotype of interest, one gene name per line.                                                                          |
+
+## Outputs
+| Output          | Details                                            |
+|-----------------|----------------------------------------------------|
+| Gene name file  | File containing gene names, one gene name per line |
+
 ## Citations
 
 [Zhao, M., Havrilla, J. M., Fang, L., Chen, Y., Peng, J., Liu, C., Wu C., Sarmady M., Botas P., Isla J., Lyon G., 
@@ -63,3 +78,5 @@ Bioinformatics, Volume 2, Issue 2, June 2020, lqaa032](https://doi.org/10.1093/n
 [Ghiassian SD, Menche J, Barabási AL. A DIseAse MOdule Detection (DIAMOnD) algorithm derived from a systematic analysis 
 of connectivity patterns of disease proteins in the human interactome. PLoS computational biology. 2015 Apr 
 8;11(4):e1004120.](https://doi.org/10.1371/journal.pcbi.1004120.g001)
+
+#----------------------------------------------------------------------------------------------------------------------
