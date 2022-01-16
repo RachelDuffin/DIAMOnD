@@ -22,6 +22,14 @@ candidate gene list.
 | cytoscape_file (optional) | True or False value. Denotes whether or not the analysis is being run using a cytoscape network file.                                                                                                                                                                       |
 
 Note that gene IDs in the network file should be NCBI IDs.
+
+## Outputs
+| Output                    | Details                                                                                                |
+|---------------------------|--------------------------------------------------------------------------------------------------------|
+| PPI file (optional)       | Protein-protein interaction file parsed from cytoscape csv                                             |
+| DIAMOnD nodes file        | File containing generated DIAMOnD nodes                                                                |
+| HPO prioritized gene list   | File containing the HPO-prioritized genes (out/prioritizedgenelist/output_file.associated_gene_list) |
+
 #----------------------------------------------------------------------------------------------------------------------
 ## Installation and running the code
 The Example directory contains a set of input files that can be used to run the code.
