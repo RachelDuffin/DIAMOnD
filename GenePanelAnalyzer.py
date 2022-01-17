@@ -43,7 +43,7 @@ def print_usage():
     print('        seed_file        : table containing the seed genes as gene names (if table contains')
     print('                           more than one column they must be tab-separated;')
     print('                           the first column will be used only)')
-    print('        n                : number of desired iteratiosn (desired number of DIAMOnD genes), 200 is a ')
+    print('        n                : number of desired iterations (desired number of DIAMOnD genes), 200 is a ')
     print('                           reasonable starting point.')
     print('        alpha            : an integer representing weight of the seeds, default value is set to 1')
     print('        outfile_name     : results of the DIAMOnD analysis will be saved under this file name')
@@ -102,6 +102,7 @@ def parse_cytoscape_file(network_edgelist_file):
                     ppi = line.strip('\n').strip(',').rsplit("\",\"", 2)[1]
                     ids = re.split(" (.*) ", ppi)
                     transposed_ppis = "{},{}".format(ids[0], ids[2])
+
                     if line is last:
                         out.write(transposed_ppis)
                     else:
@@ -367,6 +368,7 @@ def diamond_iteration_of_first_X_nodes(G, S, X, alpha):
         # ---------------------------------------------------------------------
         # Adding node with smallest p-value to the list of aaglomerated nodes
         # ---------------------------------------------------------------------
+
         added_nodes.append((next_node,
                             info[next_node][0],
                             info[next_node][1],
@@ -474,7 +476,7 @@ def ncbi_id_to_genename(ID_list, filename):
         'attributes': ['external_gene_name']
     })
     name_list = []
-    response_lines = (response.text).split("\n")
+    response_lines = response.text.split("\n")
     for line in response_lines:
         last = response_lines[-1]
         if (line is last) and (line==""):
@@ -488,6 +490,7 @@ def ncbi_id_to_genename(ID_list, filename):
 def genename_to_ncbi_id(gene_list, filename):
     print("Getting {} IDs from BioMart...".format(filename))
     server = biomart.BiomartServer("http://useast.ensembl.org/biomart")
+    server.show_databases()
     hsapiens_ensembl_genes = server.datasets['hsapiens_gene_ensembl']
     # get ID_list from parsing the output file from DIAMOnD
 
@@ -500,16 +503,18 @@ def genename_to_ncbi_id(gene_list, filename):
     with open(outfile, "w+") as out:
         response_lines = (response.text).split("\n")
         for line in response_lines:
+            line.strip("\n")
             last = response_lines[-1]
-            if (line is last) and (line==""):
+            if line is last:
                 # skip as last line is empty list
+                out.write(line)
                 pass
             else:
                 out.write(line + "\n")
     return outfile
 
 # ===========================================================================
-def Phen2Gene(hpo_terms, biomart_out):
+def phen2gene(hpo_terms, biomart_out):
     print("Prioritise candidate genes using HPO terms using Phen2Gene...")
     # hpo list is a text file
     # need to convert NCBI Ids back to gene IDs (use pip install biomart & write some code to do this)
@@ -543,10 +548,7 @@ if __name__ == '__main__':
     # read the network and the seed genes:
     G_original, seed_genes = read_input(PPI_file, seeds_file)
     # run DIAMOnD
-    added_nodes = DIAMOnD(G_original,
-                          seed_genes,
-                          max_number_of_added_nodes, alpha,
-                          outfile=outfile_name)
+    added_nodes = DIAMOnD(G_original, seed_genes, max_number_of_added_nodes, alpha, outfile=outfile_name)
 
     print("\n results have been saved to '%s' \n" % outfile_name)
 
@@ -563,4 +565,4 @@ if __name__ == '__main__':
         for item in combined_genelists:
             outfile.write(item + "\n")
 
-    Phen2Gene(hpo_terms, combined_genelist_file)
+    phen2gene(hpo_terms, combined_genelist_file)

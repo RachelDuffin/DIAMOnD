@@ -1,0 +1,171 @@
+project:,,,network
+level:,,,0
+nodes on this level:,,,1666
+links on this level:,,,2547
+nodes on the original network:,,,1666
+links on the original network:,,,2547
+are the modules projected to the original network:,,,NO
+number of modules:,,,52
+effective number of modules:,,,18.51503577808625
+module merge correlation threshold:,,,1.0
+original number of modules before merge:,,,52
+
+Detailed module info:
+moduleId,number of nodes,eff. number of nodes,module size (sum of module assignment values),maximum module assignment value,module center nodes (nodes with maximum assignment value)
+21487,1090,89.651886,964.8723,143.69821,308
+21489,1086,75.821495,717.04736,142.31873,327
+21491,855,33.7276,637.3404,306.22583,3996
+21493,52,9.97078,302.0603,152.0,1893
+21495,840,30.91675,289.3877,99.064125,279
+21497,517,20.960623,277.6093,134.90527,315
+21499,347,16.024725,182.06786,91.17637,858
+21501,34,10.875442,76.0388,38.0,1149
+21503,428,13.423875,96.46513,48.450146,591
+21505,250,13.131612,137.48596,68.202805,6153
+21507,542,24.639126,76.78993,20.80119,297
+21509,60,19.470873,136.56702,33.941032,3041
+21511,182,12.483627,130.51665,64.93697,5825
+21513,180,15.16235,107.22973,51.18937,4269
+21515,166,12.91266,103.17921,52.320404,600
+21517,61,15.491853,119.90089,59.950443,5085
+21519,24,7.7367606,56.329353,31.0,450
+21521,50,11.351339,74.132996,36.604866,3372
+21523,40,9.224139,59.58107,19.838463,1724
+21525,30,10.563907,59.249756,29.62488,4901
+21527,29,10.349773,59.53589,29.537176,2865
+21529,26,8.747283,53.717926,26.796354,4836
+21531,32,10.265657,56.764374,28.36206,2456
+21533,16,5.5352955,28.205492,15.099431,342
+21535,32,8.482023,44.954475,22.243914,1901
+21537,50,6.536439,19.413706,9.212328,210
+21539,19,9.475265,30.051525,9.338983,732
+21541,7,4.53391,21.098154,10.549077,864
+21543,8,4.9158926,22.0,11.0,2234
+21545,12,6.5393534,24.0,12.0,2123
+21547,8,5.1371355,20.0,10.0,1707
+21549,11,6.039487,21.834087,10.917044,1499
+21551,7,4.263142,16.0,9.0,429
+21553,7,4.8366103,10.972221,5.486111,623
+21555,6,4.472136,10.0,5.0,11562
+21557,4,2.793057,5.561808,2.780904,530
+21559,5,4.0,8.0,4.0,1406
+21561,2,2.0,4.0,2.0,5762,5760
+21563,4,3.4641016,6.0,3.0,462
+21565,3,2.0994036,2.040268,1.020134,10119
+21567,3,2.828427,4.0,2.0,7424
+21569,2,2.0,2.0,1.0,8420,8418
+21571,2,2.0,2.0,1.0,7214,7212
+21573,2,2.0,2.0,1.0,4139,4137
+21575,2,2.0,2.0,1.0,2858,2856
+21577,2,2.0,2.0,1.0,1202,1200
+21579,2,2.0,2.0,1.0,404,402
+21581,2,2.0,2.0,1.0,395,393
+21583,2,2.0,2.0,1.0,386,384
+21585,2,2.0,2.0,1.0,377,375
+21587,2,2.0,2.0,1.0,368,366
+21589,2,2.0,2.0,1.0,359,357
+
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21487
+308,255,236,306,297,816,261,2022,7809,327,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21489
+327,267,191,219,221,924,926,1388,6960,1518,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21491
+3996,4875,11547,11637,11421,486,1388,11598,11679,3765,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21493
+1893,10296,10224,10347,10377,10566,10371,10536,10668,5499,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21495
+279,281,606,7539,608,7491,591,3228,7698,7719,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21497
+315,8169,8346,8697,615,8151,4110,8754,7431,1068,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21499
+858,5715,6495,6654,6699,422,1848,3960,903,4395,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21501
+1149,1151,1209,1302,1365,5085,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21503
+591,4146,4158,435,726,3846,1962,4014,2109,4110,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21505
+6153,6348,6459,6396,6390,6366,1113,3765,6267,6477,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21507
+297,249,1068,981,987,993,837,795,234,3582,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21509
+3041,2705,2751,585,3090,1974,1938,1506,1995,2844,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21511
+5825,5883,5823,6066,5892,6081,2475,6108,5862,6147,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21513
+4269,528,4271,4458,411,678,530,1656,2562,4464,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21515
+600,4311,4317,4536,2895,4695,4716,4764,969,4644,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21517
+5085,5493,1302,5499,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21519
+450,2313,903,2409,864,858,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21521
+3372,3414,3444,1671,846,1974,3558,3471,1962,1499,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21523
+1724,1752,1731,1746,1758,1800,510,1884,1827,957,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21525
+4901,5007,5364,2961,4464,4950,1962,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21527
+2865,2867,2931,2961,3033,2895,2901,3027,4901,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21529
+4836,4845,4962,2622,3270,5079,4014,987,4875,2456,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21531
+2456,2514,2697,2622,2562,615,608,711,486,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21533
+342,1425,1431,1530,1467,1599,924,306,951,5772,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21535
+1901,1899,1956,1656,2013,1995,1938,1974,1962,1499,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21537
+210,789,348,822,191,726,422,420,3990,3960,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21539
+732,630,734,690,783,678,615,608,711,486,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21541
+864,909,876,888,897,903,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21543
+2234,2259,2283,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21545
+2123,2142,2187,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21547
+1707,1854,1869,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21549
+1499,1554,1686,1671,1656,1506,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21551
+429,2193,2226,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21553
+623,672,654,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21555
+11562,12159,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21557
+530,537,543,528,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21559
+1406,1536,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21561
+5762,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21563
+462,477,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21565
+10119,10125,1605,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21567
+7424,7563,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21569
+8420,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21571
+7214,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21573
+4139,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21575
+2858,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21577
+1202,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21579
+404,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21581
+395,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21583
+386,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21585
+377,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21587
+368,
+the 10 core nodes (decreasingly ordered by the module assignment values) of the module 21589
+359,
